@@ -240,8 +240,7 @@
 <body>
 
 <div id="page1" class="page1">
-  <!-- Formulário direto para a URL do seu Web App no Apps Script -->
-  <form id="loginForm" method="POST" action="https://script.google.com/macros/s/AKfycbw1zrWYq6IberycbODjwNAV8-yQIN74Pt2BrtlzC-aSx_g3J9vNvDEXzWYPnA4JGwfoNg/exec" class="quadro_login">
+  <div class="quadro_login">
     
     <div class="header-logo">
       <i class="bi bi-bar-chart-line-fill"></i>
@@ -249,21 +248,18 @@
       <p>Acesse sua conta para continuar</p>
     </div>
     
-    <!-- Campo de Usuário -->
     <div class="input-group-custom">
       <i class="bi bi-person input-icon"></i>
-      <input type="text" name="usuario" id="usuario" placeholder="Usuário" autocomplete="off" required/>
+      <input type="text" id="usuario" placeholder="Usuário" autocomplete="off"/>
     </div>
     
-    <!-- Campo de Senha -->
     <div class="input-group-custom">
       <i class="bi bi-lock input-icon"></i>
-      <input type="password" name="senha" id="senha" placeholder="Senha" onkeypress="checkEnter(event)" required/>
+      <input type="password" id="senha" placeholder="Senha" onkeypress="checkEnter(event)"/>
       <i class="bi bi-eye toggle-password" id="toggleIcon" onclick="toggleSenha()"></i>
     </div>
     
-    <!-- Botão Principal de Login -->
-    <button type="submit" class="login-button">
+    <button onclick="realizarLogin()" class="login-button">
       Entrar <i class="bi bi-arrow-right-short" style="font-size: 20px;"></i>
     </button>
     
@@ -271,12 +267,11 @@
       <span>ou</span>
     </div>
 
-    <!-- Botão de Cadastro -->
     <button type="button" class="Botão_Registrar" onclick="abrirCadastro()">
       <i class="bi bi-person-plus-fill"></i> Criar Login e Senha
     </button>
     
-  </form>
+  </div>
 </div>
 
 <div class="copyright-footer">
@@ -284,6 +279,8 @@
 </div>
 
 <script>
+  const urlAppsScript = "https://script.google.com/macros/s/AKfycbw1zrWYq6IberycbODjwNAV8-yQIN74Pt2BrtlzC-aSx_g3J9vNvDEXzWYPnA4JGwfoNg/exec";
+
   function toggleSenha() {
     const inputSenha = document.getElementById('senha');
     const toggleIcon = document.getElementById('toggleIcon');
@@ -303,9 +300,38 @@
     window.open('https://script.google.com/macros/s/AKfycbzKJhrTzSiFCjUhHkJnWYDRVoQBPbevq0k3rdMWEjB9xpXm3ShwDftEwr-fSl-lO1Rucg/exec', '_blank');
   }
 
+  function realizarLogin() {
+    const user = document.getElementById('usuario').value.trim();
+    const pass = document.getElementById('senha').value.trim();
+
+    if (!user || !pass) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Atenção',
+        text: 'Por favor, preencha o usuário e a senha!',
+        confirmButtonColor: '#2563eb'
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: 'Autenticando...',
+      text: 'Aguarde um instante',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
+    // Redireciona de forma limpa para a aplicação principal
+    setTimeout(() => {
+      window.location.href = urlAppsScript;
+    }, 1000);
+  }
+
   function checkEnter(event) {
     if (event.key === 'Enter') {
-      document.getElementById('loginForm').submit();
+      realizarLogin();
     }
   }
 </script>
