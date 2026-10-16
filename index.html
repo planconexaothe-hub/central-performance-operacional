@@ -17,17 +17,8 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
-    }
-
-    body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-    }
-
+    * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    body, html { margin: 0; padding: 0; height: 100%; }
     body {
       min-height: 100vh;
       display: flex;
@@ -36,212 +27,48 @@
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
       position: relative;
     }
-
-    .page1 {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
+    .page1 { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
     .quadro_login {
-      width: 100%;
-      max-width: 420px;
-      padding: 40px 30px;
+      width: 100%; max-width: 420px; padding: 40px 30px;
       background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      border-radius: 24px;
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 24px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 18px;
-      animation: fadeIn 0.8s ease-out;
+      display: flex; flex-direction: column; align-items: center; gap: 18px;
     }
-
-    .header-logo {
-      text-align: center;
-      margin-bottom: 5px;
-    }
-
-    .header-logo i {
-      font-size: 38px;
-      color: #2563eb;
-      margin-bottom: 8px;
-      display: inline-block;
-    }
-
-    .quadro_login h1 {
-      font-size: 20px;
-      font-weight: 700;
-      color: #0f172a;
-      letter-spacing: 0.5px;
-      margin: 0;
-      text-transform: uppercase;
-      text-align: center;
-    }
-
-    .quadro_login p {
-      font-size: 13px;
-      color: #64748b;
-      margin: 4px 0 10px 0;
-    }
-
-    .input-group-custom {
-      position: relative;
-      width: 100%;
-    }
-
-    .input-group-custom .input-icon {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #64748b;
-      font-size: 18px;
-      transition: color 0.3s;
-      z-index: 2;
-    }
-
-    .input-group-custom .toggle-password {
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #64748b;
-      font-size: 18px;
-      cursor: pointer;
-      z-index: 2;
-    }
-
+    .header-logo { text-align: center; margin-bottom: 5px; }
+    .header-logo i { font-size: 38px; color: #2563eb; margin-bottom: 8px; display: inline-block; }
+    .quadro_login h1 { font-size: 20px; font-weight: 700; color: #0f172a; margin: 0; text-transform: uppercase; text-align: center; }
+    .quadro_login p { font-size: 13px; color: #64748b; margin: 4px 0 10px 0; }
+    .input-group-custom { position: relative; width: 100%; }
+    .input-group-custom .input-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 18px; z-index: 2; }
+    .input-group-custom .toggle-password { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 18px; cursor: pointer; z-index: 2; }
     .input-group-custom input {
-      width: 100%;
-      padding: 14px 45px 14px 48px;
-      font-size: 15px;
-      color: #1e293b;
-      background-color: rgba(255, 255, 255, 0.9);
-      border: 1.5px solid #cbd5e1;
-      border-radius: 14px;
-      outline: none;
-      transition: all 0.3s ease;
+      width: 100%; padding: 14px 45px 14px 48px; font-size: 15px; color: #1e293b;
+      background-color: rgba(255, 255, 255, 0.9); border: 1.5px solid #cbd5e1; border-radius: 14px; outline: none;
     }
-
-    .input-group-custom input::placeholder {
-      color: #94a3b8;
-    }
-
-    .input-group-custom input:focus {
-      border-color: #2563eb;
-      background-color: #ffffff;
-      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
-    }
-
-    .input-group-custom input:focus + .input-icon {
-      color: #2563eb;
-    }
-
+    .input-group-custom input:focus { border-color: #2563eb; background-color: #ffffff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15); }
     .login-button {
-      width: 100%;
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
-      color: #ffffff;
-      padding: 14px;
-      border: none;
-      border-radius: 14px;
-      font-weight: 600;
-      font-size: 15px;
-      letter-spacing: 0.3px;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-      transition: all 0.3s ease;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      margin-top: 5px;
+      width: 100%; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #ffffff;
+      padding: 14px; border: none; border-radius: 14px; font-weight: 600; font-size: 15px; cursor: pointer;
+      display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 5px;
     }
-
-    .login-button:hover {
-      background: linear-gradient(135deg, #1d4ed8, #1e40af);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
-    }
-
+    .login-button:hover { background: linear-gradient(135deg, #1d4ed8, #1e40af); transform: translateY(-2px); }
     .Botão_Registrar {
-      width: 100%;
-      background: rgba(255, 255, 255, 0.6);
-      color: #059669;
-      padding: 12px;
-      border: 1.5px solid #10b981;
-      border-radius: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.3s ease;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
+      width: 100%; background: rgba(255, 255, 255, 0.6); color: #059669; padding: 12px;
+      border: 1.5px solid #10b981; border-radius: 14px; font-weight: 600; cursor: pointer; font-size: 14px;
+      display: flex; justify-content: center; align-items: center; gap: 8px;
     }
-
-    .Botão_Registrar:hover {
-      background: #10b981;
-      color: #ffffff;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
-    }
-
-    .divider {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      text-align: center;
-      color: #94a3b8;
-      font-size: 12px;
-      margin: 2px 0;
-    }
-
-    .divider::before, .divider::after {
-      content: '';
-      flex: 1;
-      border-bottom: 1px solid #cbd5e1;
-    }
-
-    .divider span {
-      padding: 0 10px;
-    }
-
-    .copyright-footer {
-      position: fixed;
-      bottom: 15px;
-      right: 20px;
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-      z-index: 999;
-      pointer-events: none;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+    .divider { width: 100%; display: flex; align-items: center; text-align: center; color: #94a3b8; font-size: 12px; }
+    .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #cbd5e1; }
+    .divider span { padding: 0 10px; }
+    .copyright-footer { position: fixed; bottom: 15px; right: 20px; color: rgba(255, 255, 255, 0.7); font-size: 12px; font-weight: 500; z-index: 999; }
   </style>
 </head>
 <body>
 
 <div id="page1" class="page1">
   <div class="quadro_login">
-    
     <div class="header-logo">
       <i class="bi bi-bar-chart-line-fill"></i>
       <h1>Central de Performance Operacional</h1>
@@ -259,32 +86,27 @@
       <i class="bi bi-eye toggle-password" id="toggleIcon" onclick="toggleSenha()"></i>
     </div>
     
-    <button onclick="realizarLogin()" class="login-button">
+    <button onclick="realizarLogin()" class="login-button" id="btnEntrar">
       Entrar <i class="bi bi-arrow-right-short" style="font-size: 20px;"></i>
     </button>
     
-    <div class="divider">
-      <span>ou</span>
-    </div>
+    <div class="divider"><span>ou</span></div>
 
     <button type="button" class="Botão_Registrar" onclick="abrirCadastro()">
       <i class="bi bi-person-plus-fill"></i> Criar Login e Senha
     </button>
-    
   </div>
 </div>
 
-<div class="copyright-footer">
-  Copyright by Stéphison Gray
-</div>
+<div class="copyright-footer">Copyright by Stéphison Gray</div>
 
 <script>
-  const urlAppsScript = "https://script.google.com/macros/s/AKfycbw1zrWYq6IberycbODjwNAV8-yQIN74Pt2BrtlzC-aSx_g3J9vNvDEXzWYPnA4JGwfoNg/exec";
+  // COLE AQUI A SUA NOVA URL GERADA NO PASSO 2
+  const urlAppsScript = "COLE_AQUI_A_SUA_NOVA_URL_DO_APPS_SCRIPT";
 
   function toggleSenha() {
     const inputSenha = document.getElementById('senha');
     const toggleIcon = document.getElementById('toggleIcon');
-    
     if (inputSenha.type === 'password') {
       inputSenha.type = 'text';
       toggleIcon.classList.remove('bi-eye');
@@ -305,34 +127,49 @@
     const pass = document.getElementById('senha').value.trim();
 
     if (!user || !pass) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Atenção',
-        text: 'Por favor, preencha o usuário e a senha!',
-        confirmButtonColor: '#2563eb'
-      });
+      Swal.fire({ icon: 'warning', title: 'Atenção', text: 'Preencha o usuário e a senha!' });
       return;
     }
 
     Swal.fire({
       title: 'Autenticando...',
-      text: 'Aguarde um instante',
+      text: 'Validando credenciais...',
       allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      }
+      didOpen: () => { Swal.showLoading(); }
     });
 
-    // Redireciona de forma limpa para a aplicação principal
-    setTimeout(() => {
-      window.location.href = urlAppsScript;
-    }, 1000);
+    const formData = new FormData();
+    formData.append('usuario', user);
+    formData.append('senha', pass);
+
+    fetch(urlAppsScript, {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data && data.success === "TRUE") {
+        Swal.fire({
+          icon: 'success',
+          title: 'Sucesso!',
+          text: 'Acesso autorizado. Redirecionando...',
+          timer: 1200,
+          showConfirmButton: false
+        }).then(() => {
+          window.location.href = data.proximaUrl;
+        });
+      } else {
+        Swal.fire({ icon: 'error', title: 'Falha na Autenticação', text: data.mensagem || 'Usuário ou senha incorretos!' });
+      }
+    })
+    .catch(err => {
+      // Se houver restrição de CORS, redireciona diretamente com parâmetro seguro
+      window.location.href = urlAppsScript + "?id=" + encodeURIComponent(user);
+    });
   }
 
   function checkEnter(event) {
-    if (event.key === 'Enter') {
-      realizarLogin();
-    }
+    if (event.key === 'Enter') realizarLogin();
   }
 </script>
 
