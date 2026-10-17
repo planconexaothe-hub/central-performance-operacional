@@ -88,17 +88,27 @@
   </style>
 
   <script>
-    // VERIFICAÇÃO ANTES DE RENDERIZAR: Se tem ID na URL ou Sessão salva, esconde o login IMEDIATAMENTE
+    // VERIFICAÇÃO IMEDIATA ANTES DE DESENHAR A PÁGINA
     (function() {
       const urlParams = new URLSearchParams(window.location.search);
       const isLogout = urlParams.get('logout');
+
+      if (isLogout) {
+        // Se for logout, limpa TUDO e força a exibição imediata do login
+        localStorage.removeItem('cpo_usuario');
+        localStorage.clear();
+        sessionStorage.clear();
+        window.history.replaceState({}, document.title, window.location.pathname);
+        return; // Sai sem injetar o estilo que esconde o login
+      }
+
       const userIdUrl = urlParams.get('id');
       const usuarioSalvo = localStorage.getItem('cpo_usuario');
 
-      if (!isLogout && (userIdUrl || usuarioSalvo)) {
+      if (userIdUrl || usuarioSalvo) {
         const idParaUsar = userIdUrl || usuarioSalvo;
         localStorage.setItem('cpo_usuario', idParaUsar);
-        // Injeta estilo global para ocultar o painel de login na raiz
+        // Esconde o painel de login na raiz apenas se NÃO for logout e houver sessão
         document.write('<style>#loginWrapper { display: none !important; }</style>');
       }
     })();
@@ -147,17 +157,17 @@
   window.onload = function() {
     const urlParams = new URLSearchParams(window.location.search);
     const isLogout = urlParams.get('logout');
-    const userIdUrl = urlParams.get('id');
-    const usuarioSalvo = localStorage.getItem('cpo_usuario');
 
     if (isLogout) {
       localStorage.removeItem('cpo_usuario');
       localStorage.clear();
       sessionStorage.clear();
-      window.history.replaceState({}, document.title, window.location.pathname);
       mostrarTelaLogin();
       return;
     }
+
+    const userIdUrl = urlParams.get('id');
+    const usuarioSalvo = localStorage.getItem('cpo_usuario');
 
     if (userIdUrl || usuarioSalvo) {
       const idParaUsar = userIdUrl || usuarioSalvo;
@@ -169,8 +179,10 @@
   };
 
   function mostrarTelaLogin() {
-    document.getElementById('loginWrapper').style.display = 'flex';
-    document.getElementById('appFrame').src = 'about:blank';
+    const wrapper = document.getElementById('loginWrapper');
+    if (wrapper) wrapper.style.display = 'flex';
+    const iframe = document.getElementById('appFrame');
+    if (iframe) iframe.src = 'about:blank';
   }
 
   function toggleSenha() {
@@ -218,11 +230,13 @@
 
   function carregarPainelNoIframe(user) {
     const iframe = document.getElementById('appFrame');
+    if (!iframe) return;
     iframe.src = urlIndexAppsScript + "?id=" + encodeURIComponent(user);
 
     iframe.onload = function() {
       Swal.close();
-      document.getElementById('loginWrapper').style.display = 'none';
+      const wrapper = document.getElementById('loginWrapper');
+      if (wrapper) wrapper.style.display = 'none';
     };
   }
 
