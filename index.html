@@ -127,21 +127,26 @@
 <script>
   const urlIndexAppsScript = "https://script.google.com/macros/s/AKfycbwksudU5-qTxv0mLoKRaNWQkkqf9Pjxj4CHdE47V71z9Pu41LgJMO7XyyUoiV4WTj_h/exec";
 
-  window.onload = function() {
-    // Verifica se já existe um usuário logado salvo no navegador
-    const usuarioSalvo = localStorage.getItem('cpo_usuario');
+  // Esconde o card de login IMEDIATAMENTE se já houver ID na URL
+  (function checarSessaoImediata() {
     const urlParams = new URLSearchParams(window.location.search);
     const userIdUrl = urlParams.get('id');
+    const usuarioSalvo = localStorage.getItem('cpo_usuario');
 
-    if (userIdUrl) {
-      // Se veio um ID pela URL (ex: voltando de outra página), atualiza a sessão salva
-      localStorage.setItem('cpo_usuario', userIdUrl);
-      carregarPainelNoIframe(userIdUrl);
-    } else if (usuarioSalvo) {
-      // Se já tem sessão salva, abre o painel direto instantaneamente (sem tela de login)
+    if (userIdUrl || usuarioSalvo) {
+      const idParaUsar = userIdUrl || usuarioSalvo;
+      localStorage.setItem('cpo_usuario', idParaUsar);
+      
+      // Aplica estilo diretamente para evitar que o card pisque
+      document.write('<style>#loginWrapper { display: none !important; }</style>');
+    }
+  })();
+
+  window.onload = function() {
+    const usuarioSalvo = localStorage.getItem('cpo_usuario');
+    if (usuarioSalvo) {
       carregarPainelNoIframe(usuarioSalvo);
     }
-    // Caso contrário, permanece na tela de login padrão
   };
 
   function toggleSenha() {
@@ -178,7 +183,6 @@
       didOpen: () => { Swal.showLoading(); }
     });
 
-    // Salva o usuário no navegador para manter a sessão
     localStorage.setItem('cpo_usuario', user);
     carregarPainelNoIframe(user);
   }
