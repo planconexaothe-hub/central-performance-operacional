@@ -127,25 +127,37 @@
 <script>
   const urlIndexAppsScript = "https://script.google.com/macros/s/AKfycbwksudU5-qTxv0mLoKRaNWQkkqf9Pjxj4CHdE47V71z9Pu41LgJMO7XyyUoiV4WTj_h/exec";
 
-  // Esconde o card de login IMEDIATAMENTE se já houver ID na URL
+  // Verifica logout ou sessão antes da renderização
   (function checarSessaoImediata() {
     const urlParams = new URLSearchParams(window.location.search);
+    const isLogout = urlParams.get('logout');
     const userIdUrl = urlParams.get('id');
+
+    if (isLogout) {
+      // Se clicou em Sair: apaga completamente os dados locais
+      localStorage.removeItem('cpo_usuario');
+      sessionStorage.clear();
+      // Limpa a URL removendo o parâmetro ?logout=true
+      window.history.replaceState({}, document.title, window.location.pathname);
+      return;
+    }
+
     const usuarioSalvo = localStorage.getItem('cpo_usuario');
 
     if (userIdUrl || usuarioSalvo) {
       const idParaUsar = userIdUrl || usuarioSalvo;
       localStorage.setItem('cpo_usuario', idParaUsar);
-      
-      // Aplica estilo diretamente para evitar que o card pisque
       document.write('<style>#loginWrapper { display: none !important; }</style>');
     }
   })();
 
   window.onload = function() {
-    const usuarioSalvo = localStorage.getItem('cpo_usuario');
-    if (usuarioSalvo) {
-      carregarPainelNoIframe(usuarioSalvo);
+    const urlParams = new URLSearchParams(window.location.search);
+    if (!urlParams.get('logout')) {
+      const usuarioSalvo = localStorage.getItem('cpo_usuario');
+      if (usuarioSalvo) {
+        carregarPainelNoIframe(usuarioSalvo);
+      }
     }
   };
 
