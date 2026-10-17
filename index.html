@@ -127,19 +127,16 @@
 <script>
   const urlIndexAppsScript = "https://script.google.com/macros/s/AKfycbwksudU5-qTxv0mLoKRaNWQkkqf9Pjxj4CHdE47V71z9Pu41LgJMO7XyyUoiV4WTj_h/exec";
 
-  // Tratamento absoluto de Logout no carregamento
+  // Tratamento de Logout ou Recuperação de Sessão
   const urlParams = new URLSearchParams(window.location.search);
   const isLogout = urlParams.get('logout');
 
   if (isLogout) {
-    // Destrói qualquer vestígio de sessão salva no navegador
     localStorage.removeItem('cpo_usuario');
     localStorage.clear();
     sessionStorage.clear();
-    // Limpa a URL para sumir o ?logout=true
     window.history.replaceState({}, document.title, window.location.pathname);
   } else {
-    // Se não for logout, verifica se pode logar direto
     const userIdUrl = urlParams.get('id');
     const usuarioSalvo = localStorage.getItem('cpo_usuario');
 
@@ -179,8 +176,13 @@
   }
 
   function entrarSistema() {
-    const user = document.getElementById('usuario'].value.trim();
-    const pass = document.getElementById('senha'].value.trim();
+    const userInput = document.getElementById('usuario');
+    const passInput = document.getElementById('senha');
+
+    if (!userInput || !passInput) return;
+
+    const user = userInput.value.trim();
+    const pass = passInput.value.trim();
 
     if (!user || !pass) {
       Swal.fire({ icon: 'warning', title: 'Atenção', text: 'Preencha o usuário e a senha!' });
