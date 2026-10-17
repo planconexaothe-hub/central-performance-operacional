@@ -127,35 +127,36 @@
 <script>
   const urlIndexAppsScript = "https://script.google.com/macros/s/AKfycbwksudU5-qTxv0mLoKRaNWQkkqf9Pjxj4CHdE47V71z9Pu41LgJMO7XyyUoiV4WTj_h/exec";
 
-  // Tratamento de Logout ou Recuperação de Sessão
-  const urlParams = new URLSearchParams(window.location.search);
-  const isLogout = urlParams.get('logout');
-
-  if (isLogout) {
-    localStorage.removeItem('cpo_usuario');
-    localStorage.clear();
-    sessionStorage.clear();
-    window.history.replaceState({}, document.title, window.location.pathname);
-  } else {
-    const userIdUrl = urlParams.get('id');
-    const usuarioSalvo = localStorage.getItem('cpo_usuario');
-
-    if (userIdUrl || usuarioSalvo) {
-      const idParaUsar = userIdUrl || usuarioSalvo;
-      localStorage.setItem('cpo_usuario', idParaUsar);
-      document.write('<style>#loginWrapper { display: none !important; }</style>');
-    }
-  }
-
   window.onload = function() {
-    const params = new URLSearchParams(window.location.search);
-    if (!params.get('logout')) {
-      const usuarioSalvo = localStorage.getItem('cpo_usuario');
-      if (usuarioSalvo) {
-        carregarPainelNoIframe(usuarioSalvo);
-      }
+    const urlParams = new URLSearchParams(window.location.search);
+    const isLogout = urlParams.get('logout');
+    const userIdUrl = urlParams.get('id');
+
+    if (isLogout) {
+      // Se solicitou logout: limpa tudo e mantém a tela de login visível
+      localStorage.removeItem('cpo_usuario');
+      localStorage.clear();
+      sessionStorage.clear();
+      window.history.replaceState({}, document.title, window.location.pathname);
+      mostrarTelaLogin();
+      return;
+    }
+
+    if (userIdUrl) {
+      // Se veio com ID na URL (ex: botão Voltar ao Portal)
+      localStorage.setItem('cpo_usuario', userIdUrl);
+      carregarPainelNoIframe(userIdUrl);
+    } else {
+      // Sem ID e sem logout: abre na tela de login por padrão
+      localStorage.removeItem('cpo_usuario');
+      mostrarTelaLogin();
     }
   };
+
+  function mostrarTelaLogin() {
+    document.getElementById('loginWrapper').style.display = 'flex';
+    document.getElementById('appFrame').src = 'about:blank';
+  }
 
   function toggleSenha() {
     const inputSenha = document.getElementById('senha');
