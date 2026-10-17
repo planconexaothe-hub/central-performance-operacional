@@ -127,13 +127,21 @@
 <script>
   const urlIndexAppsScript = "https://script.google.com/macros/s/AKfycbwksudU5-qTxv0mLoKRaNWQkkqf9Pjxj4CHdE47V71z9Pu41LgJMO7XyyUoiV4WTj_h/exec";
 
-  // Verifica ao carregar se veio um ID na URL (ex: ?id=Sgray vindo do botão Voltar)
   window.onload = function() {
+    // Verifica se já existe um usuário logado salvo no navegador
+    const usuarioSalvo = localStorage.getItem('cpo_usuario');
     const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get('id');
-    if (userId) {
-      carregarPainelNoIframe(userId);
+    const userIdUrl = urlParams.get('id');
+
+    if (userIdUrl) {
+      // Se veio um ID pela URL (ex: voltando de outra página), atualiza a sessão salva
+      localStorage.setItem('cpo_usuario', userIdUrl);
+      carregarPainelNoIframe(userIdUrl);
+    } else if (usuarioSalvo) {
+      // Se já tem sessão salva, abre o painel direto instantaneamente (sem tela de login)
+      carregarPainelNoIframe(usuarioSalvo);
     }
+    // Caso contrário, permanece na tela de login padrão
   };
 
   function toggleSenha() {
@@ -170,6 +178,8 @@
       didOpen: () => { Swal.showLoading(); }
     });
 
+    // Salva o usuário no navegador para manter a sessão
+    localStorage.setItem('cpo_usuario', user);
     carregarPainelNoIframe(user);
   }
 
