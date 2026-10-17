@@ -86,6 +86,23 @@
       z-index: 5;
     }
   </style>
+
+  <script>
+    // VERIFICAÇÃO ANTES DE RENDERIZAR: Se tem ID na URL ou Sessão salva, esconde o login IMEDIATAMENTE
+    (function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const isLogout = urlParams.get('logout');
+      const userIdUrl = urlParams.get('id');
+      const usuarioSalvo = localStorage.getItem('cpo_usuario');
+
+      if (!isLogout && (userIdUrl || usuarioSalvo)) {
+        const idParaUsar = userIdUrl || usuarioSalvo;
+        localStorage.setItem('cpo_usuario', idParaUsar);
+        // Injeta estilo global para ocultar o painel de login na raiz
+        document.write('<style>#loginWrapper { display: none !important; }</style>');
+      }
+    })();
+  </script>
 </head>
 <body>
 
@@ -142,7 +159,6 @@
       return;
     }
 
-    // Se possui ID na URL OU sessão ativa salva no localStorage
     if (userIdUrl || usuarioSalvo) {
       const idParaUsar = userIdUrl || usuarioSalvo;
       localStorage.setItem('cpo_usuario', idParaUsar);
