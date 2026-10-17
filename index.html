@@ -131,9 +131,9 @@
     const urlParams = new URLSearchParams(window.location.search);
     const isLogout = urlParams.get('logout');
     const userIdUrl = urlParams.get('id');
+    const usuarioSalvo = localStorage.getItem('cpo_usuario');
 
     if (isLogout) {
-      // Se solicitou logout: limpa tudo e mantém a tela de login visível
       localStorage.removeItem('cpo_usuario');
       localStorage.clear();
       sessionStorage.clear();
@@ -142,13 +142,12 @@
       return;
     }
 
-    if (userIdUrl) {
-      // Se veio com ID na URL (ex: botão Voltar ao Portal)
-      localStorage.setItem('cpo_usuario', userIdUrl);
-      carregarPainelNoIframe(userIdUrl);
+    // Se possui ID na URL OU sessão ativa salva no localStorage
+    if (userIdUrl || usuarioSalvo) {
+      const idParaUsar = userIdUrl || usuarioSalvo;
+      localStorage.setItem('cpo_usuario', idParaUsar);
+      carregarPainelNoIframe(idParaUsar);
     } else {
-      // Sem ID e sem logout: abre na tela de login por padrão
-      localStorage.removeItem('cpo_usuario');
       mostrarTelaLogin();
     }
   };
