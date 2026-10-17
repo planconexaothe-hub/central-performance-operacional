@@ -18,7 +18,8 @@
 
   <style>
     * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
-    body, html { margin: 0; padding: 0; height: 100%; }
+    body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; }
+    
     body {
       min-height: 100vh;
       display: flex;
@@ -27,7 +28,9 @@
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
       position: relative;
     }
+
     .page1 { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
+    
     .quadro_login {
       width: 100%; max-width: 420px; padding: 40px 30px;
       background: rgba(255, 255, 255, 0.95);
@@ -36,33 +39,53 @@
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
       display: flex; flex-direction: column; align-items: center; gap: 18px;
     }
+
     .header-logo { text-align: center; margin-bottom: 5px; }
     .header-logo i { font-size: 38px; color: #2563eb; margin-bottom: 8px; display: inline-block; }
     .quadro_login h1 { font-size: 20px; font-weight: 700; color: #0f172a; margin: 0; text-transform: uppercase; text-align: center; }
     .quadro_login p { font-size: 13px; color: #64748b; margin: 4px 0 10px 0; }
+    
     .input-group-custom { position: relative; width: 100%; }
     .input-group-custom .input-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 18px; z-index: 2; }
     .input-group-custom .toggle-password { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 18px; cursor: pointer; z-index: 2; }
+    
     .input-group-custom input {
       width: 100%; padding: 14px 45px 14px 48px; font-size: 15px; color: #1e293b;
       background-color: rgba(255, 255, 255, 0.9); border: 1.5px solid #cbd5e1; border-radius: 14px; outline: none;
     }
     .input-group-custom input:focus { border-color: #2563eb; background-color: #ffffff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15); }
+    
     .login-button {
       width: 100%; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #ffffff;
       padding: 14px; border: none; border-radius: 14px; font-weight: 600; font-size: 15px; cursor: pointer;
       display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 5px;
     }
     .login-button:hover { background: linear-gradient(135deg, #1d4ed8, #1e40af); transform: translateY(-2px); }
+    
     .Botão_Registrar {
       width: 100%; background: rgba(255, 255, 255, 0.6); color: #059669; padding: 12px;
       border: 1.5px solid #10b981; border-radius: 14px; font-weight: 600; cursor: pointer; font-size: 14px;
       display: flex; justify-content: center; align-items: center; gap: 8px;
     }
+    
     .divider { width: 100%; display: flex; align-items: center; text-align: center; color: #94a3b8; font-size: 12px; }
     .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #cbd5e1; }
     .divider span { padding: 0 10px; }
+    
     .copyright-footer { position: fixed; bottom: 15px; right: 20px; color: rgba(255, 255, 255, 0.7); font-size: 12px; font-weight: 500; z-index: 999; }
+
+    /* Estilo do iFrame que carregará o Index sem a barra */
+    #painelFrame {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      border: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      background-color: #0f172a;
+    }
   </style>
 </head>
 <body>
@@ -86,7 +109,7 @@
       <i class="bi bi-eye toggle-password" id="toggleIcon" onclick="toggleSenha()"></i>
     </div>
     
-    <button onclick="realizarLogin()" class="login-button" id="btnEntrar">
+    <button onclick="realizarLogin()" class="login-button">
       Entrar <i class="bi bi-arrow-right-short" style="font-size: 20px;"></i>
     </button>
     
@@ -98,11 +121,14 @@
   </div>
 </div>
 
+<!-- Frame do Painel Principal -->
+<iframe id="painelFrame" src=""></iframe>
+
 <div class="copyright-footer">Copyright by Stéphison Gray</div>
 
 <script>
-  // COLE AQUI A SUA NOVA URL GERADA NO PASSO 2
-  const urlAppsScript = "https://script.google.com/macros/s/AKfycbw1zrWYq6IberycbODjwNAV8-yQIN74Pt2BrtIzC-aSx_g3J9vNvDEXzWYPnA4JGwfoNg/exec";
+  // Insira aqui a URL do Web App do seu Apps Script do INDEX (a que termina em /exec)
+  const urlIndexAppsScript = "https://script.google.com/macros/s/AKfycbwksudU5-qTxv0mLoKRaNWQkkqf9Pjxj4CHdE47V71z9Pu41LgJMO7XyyUoiV4WTj_h/exec";
 
   function toggleSenha() {
     const inputSenha = document.getElementById('senha');
@@ -133,39 +159,20 @@
 
     Swal.fire({
       title: 'Autenticando...',
-      text: 'Validando credenciais...',
+      text: 'Carregando Central de Performance Operacional...',
       allowOutsideClick: false,
       didOpen: () => { Swal.showLoading(); }
     });
 
-    const formData = new FormData();
-    formData.append('usuario', user);
-    formData.append('senha', pass);
+    // Carrega o painel diretamente no iframe sem mudar o domínio do navegador
+    const iframe = document.getElementById('painelFrame');
+    iframe.src = urlIndexAppsScript + "?id=" + encodeURIComponent(user);
 
-    fetch(urlAppsScript, {
-      method: 'POST',
-      body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data && data.success === "TRUE") {
-        Swal.fire({
-          icon: 'success',
-          title: 'Sucesso!',
-          text: 'Acesso autorizado. Redirecionando...',
-          timer: 1200,
-          showConfirmButton: false
-        }).then(() => {
-          window.location.href = data.proximaUrl;
-        });
-      } else {
-        Swal.fire({ icon: 'error', title: 'Falha na Autenticação', text: data.mensagem || 'Usuário ou senha incorretos!' });
-      }
-    })
-    .catch(err => {
-      // Se houver restrição de CORS, redireciona diretamente com parâmetro seguro
-      window.location.href = urlAppsScript + "?id=" + encodeURIComponent(user);
-    });
+    iframe.onload = function() {
+      Swal.close();
+      document.getElementById('page1').style.display = 'none';
+      iframe.style.display = 'block';
+    };
   }
 
   function checkEnter(event) {
