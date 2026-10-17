@@ -89,7 +89,6 @@
 </head>
 <body>
 
-<!-- Tela de Login Inicial -->
 <div id="loginWrapper" class="login-wrapper">
   <div class="quadro_login">
     <div class="header-logo">
@@ -121,13 +120,21 @@
   </div>
 </div>
 
-<!-- Iframe que esconde a barra do Google ao carregar o painel internamente -->
 <iframe id="appFrame" src="about:blank"></iframe>
 
 <div class="copyright-footer">Copyright by Stéphison Gray</div>
 
 <script>
   const urlIndexAppsScript = "https://script.google.com/macros/s/AKfycbwksudU5-qTxv0mLoKRaNWQkkqf9Pjxj4CHdE47V71z9Pu41LgJMO7XyyUoiV4WTj_h/exec";
+
+  // Verifica ao carregar se veio um ID na URL (ex: ?id=Sgray vindo do botão Voltar)
+  window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('id');
+    if (userId) {
+      carregarPainelNoIframe(userId);
+    }
+  };
 
   function toggleSenha() {
     const inputSenha = document.getElementById('senha');
@@ -163,13 +170,15 @@
       didOpen: () => { Swal.showLoading(); }
     });
 
-    // Atribui o link com o ID do usuário diretamente ao iframe oculto
+    carregarPainelNoIframe(user);
+  }
+
+  function carregarPainelNoIframe(user) {
     const iframe = document.getElementById('appFrame');
     iframe.src = urlIndexAppsScript + "?id=" + encodeURIComponent(user);
 
     iframe.onload = function() {
       Swal.close();
-      // Oculta a tela de login mantendo o painel rodando por baixo no iframe
       document.getElementById('loginWrapper').style.display = 'none';
     };
   }
