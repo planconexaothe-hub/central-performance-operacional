@@ -18,19 +18,21 @@
 
   <style>
     * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
-    body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; }
-    
-    body {
-      min-height: 100vh;
+    body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background: #0f172a; }
+
+    .login-wrapper {
+      width: 100%;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-      position: relative;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 10;
     }
 
-    .page1 { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
-    
     .quadro_login {
       width: 100%; max-width: 420px; padding: 40px 30px;
       background: rgba(255, 255, 255, 0.95);
@@ -72,25 +74,23 @@
     .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #cbd5e1; }
     .divider span { padding: 0 10px; }
     
-    .copyright-footer { position: fixed; bottom: 15px; right: 20px; color: rgba(255, 255, 255, 0.7); font-size: 12px; font-weight: 500; z-index: 999; }
+    .copyright-footer { position: fixed; bottom: 15px; right: 20px; color: rgba(255, 255, 255, 0.7); font-size: 12px; font-weight: 500; z-index: 999; pointer-events: none; }
 
-    /* Estilo do iFrame que carregará o Index sem a barra */
-    #painelFrame {
-      display: none;
-      width: 100vw;
-      height: 100vh;
+    #appFrame {
+      width: 100%;
+      height: 100%;
       border: none;
       position: absolute;
       top: 0;
       left: 0;
-      z-index: 1000;
-      background-color: #0f172a;
+      z-index: 5;
     }
   </style>
 </head>
 <body>
 
-<div id="page1" class="page1">
+<!-- Tela de Login Inicial -->
+<div id="loginWrapper" class="login-wrapper">
   <div class="quadro_login">
     <div class="header-logo">
       <i class="bi bi-bar-chart-line-fill"></i>
@@ -109,7 +109,7 @@
       <i class="bi bi-eye toggle-password" id="toggleIcon" onclick="toggleSenha()"></i>
     </div>
     
-    <button onclick="realizarLogin()" class="login-button">
+    <button onclick="entrarSistema()" class="login-button">
       Entrar <i class="bi bi-arrow-right-short" style="font-size: 20px;"></i>
     </button>
     
@@ -121,13 +121,12 @@
   </div>
 </div>
 
-<!-- Frame do Painel Principal -->
-<iframe id="painelFrame" src=""></iframe>
+<!-- Iframe que esconde a barra do Google ao carregar o painel internamente -->
+<iframe id="appFrame" src="about:blank"></iframe>
 
 <div class="copyright-footer">Copyright by Stéphison Gray</div>
 
 <script>
-  // Insira aqui a URL do Web App do seu Apps Script do INDEX (a que termina em /exec)
   const urlIndexAppsScript = "https://script.google.com/macros/s/AKfycbwksudU5-qTxv0mLoKRaNWQkkqf9Pjxj4CHdE47V71z9Pu41LgJMO7XyyUoiV4WTj_h/exec";
 
   function toggleSenha() {
@@ -148,7 +147,7 @@
     window.open('https://script.google.com/macros/s/AKfycbzKJhrTzSiFCjUhHkJnWYDRVoQBPbevq0k3rdMWEjB9xpXm3ShwDftEwr-fSl-lO1Rucg/exec', '_blank');
   }
 
-  function realizarLogin() {
+  function entrarSistema() {
     const user = document.getElementById('usuario').value.trim();
     const pass = document.getElementById('senha').value.trim();
 
@@ -158,25 +157,25 @@
     }
 
     Swal.fire({
-      title: 'Autenticando...',
-      text: 'Carregando Central de Performance Operacional...',
+      title: 'Carregando...',
+      text: 'Autenticando na Central de Performance...',
       allowOutsideClick: false,
       didOpen: () => { Swal.showLoading(); }
     });
 
-    // Carrega o painel diretamente no iframe sem mudar o domínio do navegador
-    const iframe = document.getElementById('painelFrame');
+    // Atribui o link com o ID do usuário diretamente ao iframe oculto
+    const iframe = document.getElementById('appFrame');
     iframe.src = urlIndexAppsScript + "?id=" + encodeURIComponent(user);
 
     iframe.onload = function() {
       Swal.close();
-      document.getElementById('page1').style.display = 'none';
-      iframe.style.display = 'block';
+      // Oculta a tela de login mantendo o painel rodando por baixo no iframe
+      document.getElementById('loginWrapper').style.display = 'none';
     };
   }
 
   function checkEnter(event) {
-    if (event.key === 'Enter') realizarLogin();
+    if (event.key === 'Enter') entrarSistema();
   }
 </script>
 
