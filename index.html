@@ -127,21 +127,20 @@
 <script>
   const urlIndexAppsScript = "https://script.google.com/macros/s/AKfycbwksudU5-qTxv0mLoKRaNWQkkqf9Pjxj4CHdE47V71z9Pu41LgJMO7XyyUoiV4WTj_h/exec";
 
-  // Verifica logout ou sessão antes da renderização
-  (function checarSessaoImediata() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const isLogout = urlParams.get('logout');
+  // Tratamento absoluto de Logout no carregamento
+  const urlParams = new URLSearchParams(window.location.search);
+  const isLogout = urlParams.get('logout');
+
+  if (isLogout) {
+    // Destrói qualquer vestígio de sessão salva no navegador
+    localStorage.removeItem('cpo_usuario');
+    localStorage.clear();
+    sessionStorage.clear();
+    // Limpa a URL para sumir o ?logout=true
+    window.history.replaceState({}, document.title, window.location.pathname);
+  } else {
+    // Se não for logout, verifica se pode logar direto
     const userIdUrl = urlParams.get('id');
-
-    if (isLogout) {
-      // Se clicou em Sair: apaga completamente os dados locais
-      localStorage.removeItem('cpo_usuario');
-      sessionStorage.clear();
-      // Limpa a URL removendo o parâmetro ?logout=true
-      window.history.replaceState({}, document.title, window.location.pathname);
-      return;
-    }
-
     const usuarioSalvo = localStorage.getItem('cpo_usuario');
 
     if (userIdUrl || usuarioSalvo) {
@@ -149,11 +148,11 @@
       localStorage.setItem('cpo_usuario', idParaUsar);
       document.write('<style>#loginWrapper { display: none !important; }</style>');
     }
-  })();
+  }
 
   window.onload = function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (!urlParams.get('logout')) {
+    const params = new URLSearchParams(window.location.search);
+    if (!params.get('logout')) {
       const usuarioSalvo = localStorage.getItem('cpo_usuario');
       if (usuarioSalvo) {
         carregarPainelNoIframe(usuarioSalvo);
@@ -180,8 +179,8 @@
   }
 
   function entrarSistema() {
-    const user = document.getElementById('usuario').value.trim();
-    const pass = document.getElementById('senha').value.trim();
+    const user = document.getElementById('usuario'].value.trim();
+    const pass = document.getElementById('senha'].value.trim();
 
     if (!user || !pass) {
       Swal.fire({ icon: 'warning', title: 'Atenção', text: 'Preencha o usuário e a senha!' });
